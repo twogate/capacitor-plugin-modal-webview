@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_close_title">Close</string>
+    <string name="menu_close_description">bottom_sheet_modal_close_button</string>
+    <string name="path_to_flush_cookie">dummy_path</string>
+</resources>

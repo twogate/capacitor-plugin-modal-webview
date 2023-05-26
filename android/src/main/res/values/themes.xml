@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorModalWebViewToolBarForegroundColor">#FFFFFFFF</color>
+    <color name="colorModalWebViewToolBarBackgroundColor">#FF000000</color>
+    <color name="colorModalWebViewBaseBackgroundColor">#F5F5F5</color>
+
+    <style name="Theme.App" parent="Theme.MaterialComponents">
+        <item name="colorPrimary">#3F51B5</item>
+    </style>
+</resources>
