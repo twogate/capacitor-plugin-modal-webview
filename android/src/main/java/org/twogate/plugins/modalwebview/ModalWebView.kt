@@ -9,9 +9,8 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.SharedFlow
 
 
-class ModalWebView(context: Context) : WebView(context) {
-    val pageLoadedStatus: SharedFlow<ModalWebViewClient.Result>
-
+class ModalWebView: WebView {
+    lateinit var pageLoadedStatus: SharedFlow<ModalWebViewClient.Result>
     fun reload(loaderView: View) {
         loaderView.visibility = View.VISIBLE
     }
@@ -38,7 +37,7 @@ class ModalWebView(context: Context) : WebView(context) {
         snackbar.show()
     }
 
-    init {
+    fun initializeWebView(options: ModalWebViewOptions) {
         setInitialScale(1)
         settings.domStorageEnabled = true
         settings.javaScriptEnabled = true
@@ -63,4 +62,12 @@ class ModalWebView(context: Context) : WebView(context) {
             return@setOnKeyListener false
         }
     }
+
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 }

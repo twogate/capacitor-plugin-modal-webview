@@ -38,12 +38,12 @@ class ModalWebViewFragment: Fragment {
         }
     }
     private fun initializeWebView(view: View) {
-        val webView = view.findViewById<ModalWebView>(R.id.custom_webview)
-        val loader = view.findViewById<CircularProgressIndicator>(R.id.modal_webview_loader)
+        val webView = view.findViewById<ModalWebView>(R.id.modal_webivew)
+        webView.initializeWebView(options)
 
+        val loader = view.findViewById<CircularProgressIndicator>(R.id.modal_webview_loader)
         val progressBar = view.findViewById<ProgressBar>(R.id.modal_webview_progress_bar)
 
-        web
         webView.webChromeClient = ModalWebViewChromeClient(progressBar)
         webView.loadUrl(options.url)
 
