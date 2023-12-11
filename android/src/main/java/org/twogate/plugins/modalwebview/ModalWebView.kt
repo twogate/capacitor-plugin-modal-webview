@@ -28,7 +28,7 @@ class ModalWebView: WebView {
         val snackbar = Snackbar
             .make(view, errorMessage, Snackbar.LENGTH_LONG)
             .setAction("OK") {
-                fragment.activity.supportFragmentManager
+                fragment.requireActivity().supportFragmentManager
                     .beginTransaction()
                     .setCustomAnimations(R.anim.dismiss_modal, R.anim.dismiss_modal)
                     .remove(fragment)

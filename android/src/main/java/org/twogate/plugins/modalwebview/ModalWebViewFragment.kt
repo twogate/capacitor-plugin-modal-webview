@@ -1,13 +1,12 @@
 package org.twogate.plugins.modalwebview
 
-import android.content.Context
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.progressindicator.CircularProgressIndicator
@@ -15,11 +14,14 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class ModalWebViewFragment: Fragment {
-
-    val activity: AppCompatActivity
-    private val options: ModalWebViewOptions
-    private val context: Context
+class ModalWebViewFragment: Fragment() {
+    private fun getOptions(): ModalWebViewOptions {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getSerializable("options", ModalWebViewOptions::class.java)!!
+        } else {
+            arguments?.getSerializable("options") as ModalWebViewOptions
+        }
+    }
 
     private fun setNavigationBarActions(view: View) {
         val toolbar = view.findViewById<MaterialToolbar>(R.id.modal_webview_toolbar)
@@ -27,7 +29,7 @@ class ModalWebViewFragment: Fragment {
         toolbar.setOnMenuItemClickListener {
             when(it.itemId) {
                 R.id.menu_close -> {
-                    activity.supportFragmentManager
+                    requireActivity().supportFragmentManager
                         .beginTransaction()
                         .setCustomAnimations(R.anim.dismiss_modal, R.anim.dismiss_modal)
                         .remove(this@ModalWebViewFragment)
@@ -38,6 +40,7 @@ class ModalWebViewFragment: Fragment {
         }
     }
     private fun initializeWebView(view: View) {
+        val options = getOptions()
         val webView = view.findViewById<ModalWebView>(R.id.modal_webivew)
         webView.initializeWebView(options)
 
@@ -47,22 +50,22 @@ class ModalWebViewFragment: Fragment {
         webView.webChromeClient = ModalWebViewChromeClient(progressBar)
         webView.loadUrl(options.url)
 
-        val metrics = context.resources.displayMetrics
+        val metrics = requireContext().resources.displayMetrics
         val rect = Rect()
-        activity.window.decorView.getWindowVisibleDisplayFrame(rect)
+        requireActivity().window.decorView.getWindowVisibleDisplayFrame(rect)
         webView.layoutParams.height = (rect.height() - (42 * metrics.density)).toInt()
 
         GlobalScope.launch {
             webView.pageLoadedStatus.collect() {
                 when (it) {
                     ModalWebViewClient.Result.Success -> {
-                        activity.runOnUiThread {
+                        requireActivity().runOnUiThread {
                             webView.loadSucceed(loader)
                         }
                     }
 
                     ModalWebViewClient.Result.Failure -> {
-                        activity.runOnUiThread {
+                        requireActivity().runOnUiThread {
                             webView?.loadFailed(view, this@ModalWebViewFragment, loader, options.loadWebPageErrorMessage)
                         }
                     }
@@ -86,9 +89,12 @@ class ModalWebViewFragment: Fragment {
         return view
     }
 
-    constructor(options: ModalWebViewOptions, activity: AppCompatActivity, context: Context) : super(R.layout.modal_webview_fragment) {
-        this.activity = activity
-        this.options = options
-        this.context = context
+    public fun newInstance(options: ModalWebViewOptions): ModalWebViewFragment {
+        val args = Bundle()
+
+        val fragment = ModalWebViewFragment()
+        args.putSerializable("options", options)
+        fragment.arguments = args
+        return fragment
     }
 }

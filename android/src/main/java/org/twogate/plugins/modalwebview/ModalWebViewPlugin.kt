@@ -34,7 +34,7 @@ class ModalWebViewPlugin : Plugin() {
             val transaction = activity.supportFragmentManager.beginTransaction()
             val viewParent = FrameLayout(bridge.context)
 
-            fragment = ModalWebViewFragment(options, activity, context)
+            fragment = ModalWebViewFragment().newInstance(options)
 
             val rect = Rect()
             activity.window.decorView.getWindowVisibleDisplayFrame(rect)
