@@ -31,6 +31,8 @@ class ModalWebViewPlugin : Plugin() {
         val ret = JSObject()
 
         activity.runOnUiThread {
+            val fragmentManager = activity.supportFragmentManager
+
             val transaction = activity.supportFragmentManager.beginTransaction()
             val viewParent = FrameLayout(bridge.context)
 

@@ -14,7 +14,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class ModalWebViewFragment: Fragment() {
+public class ModalWebViewFragment: Fragment {
+    constructor()
+
     private fun getOptions(): ModalWebViewOptions {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arguments?.getSerializable("options", ModalWebViewOptions::class.java)!!
